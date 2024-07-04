@@ -12,7 +12,8 @@ export class UserService {
 
     async createUser(body: CreateUserDTO){
 
-        
+        body.password =  await bcrypt.hash(body.password, await bcrypt.genSalt());
+
         return this.prisma.user.create({
             data:{
                 nome: body.nome,

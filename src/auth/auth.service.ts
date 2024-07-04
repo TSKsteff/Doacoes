@@ -5,6 +5,7 @@ import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/
 import { JwtService } from "@nestjs/jwt";
 import { user } from "@prisma/client";
 import { PrismaService } from 'src/prisma/prisma.service';
+import * as bcrypt from "bcrypt";
 import { MailerService } from '@nestjs-modules/mailer';
 @Injectable()
 export class AuthService{
@@ -51,7 +52,7 @@ export class AuthService{
             throw new UnauthorizedException('E-mail e/ou senha incorretos.');
         }
 
-        if(!(password===user.password)){ 
+        if(!await bcrypt.compare(password, user.password)){ 
             throw new UnauthorizedException('E-mail e/ou senha incorretos.');
         }
 
